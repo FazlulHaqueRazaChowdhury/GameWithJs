@@ -11,6 +11,7 @@ class Sprite {
         this.position = position
         this.velocity = velocity
         this.height = 150;
+        this.lastKey = '';
     }
     draw() {
         c.fillStyle = 'red';
@@ -54,7 +55,7 @@ const enemy = new Sprite(
     }
 );
 enemy.draw();
-
+let lastKey = ''
 const keys = {
     a: {
         pressed: false
@@ -69,7 +70,7 @@ const keys = {
         pressed: false
     }
 }
-let lastKey = '';
+
 function animate() {
 
     window.requestAnimationFrame(animate);
@@ -81,16 +82,17 @@ function animate() {
     player.velocity.x = 0
     enemy.velocity.x = 0
     if (keys.a.pressed && lastKey === 'a') {
-        player.velocity.x = -1
+        player.velocity.x = -5
     }
     else if (keys.d.pressed && lastKey === 'd') {
-        player.velocity.x = 1
+        player.velocity.x = 5
     }
-    else if (keys.ArrowLeft.pressed && lastKey === 'ArrowLeft') {
-        enemy.velocity.x = -1;
+    //enemy
+    if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
+        enemy.velocity.x = -5;
     }
-    else if (keys.ArrowRight.pressed && lastKey === 'ArrowRight') {
-        enemy.velocity.x = 1
+    else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
+        enemy.velocity.x = 5
     }
 
 }
@@ -109,19 +111,18 @@ window.addEventListener('keydown', (event) => {
             lastKey = 'd';
             break;
         case 'w':
-            player.velocity.y = -10
+            player.velocity.y = -15
             break;
-
         case 'ArrowRight':
             keys.ArrowRight.pressed = true;
-            lastKey = 'ArrowRight';
+            enemy.lastKey = 'ArrowRight';
             break;
         case 'ArrowLeft':
             keys.ArrowLeft.pressed = true;
-            lastKey = 'ArrowLeft';
+            enemy.lastKey = 'ArrowLeft';
             break;
         case 'ArrowUp':
-            enemy.velocity.y = -10
+            enemy.velocity.y = -15
             break;
 
     }
@@ -129,9 +130,14 @@ window.addEventListener('keydown', (event) => {
 })
 window.addEventListener('keyup', (event) => {
     switch (event.key) {
+        case 'a':
+            keys.a.pressed = false;
+            break;
+        case 'd':
+            keys.d.pressed = false;
+            break;
         case 'ArrowRight':
             keys.ArrowRight.pressed = false;
-
             break;
         case 'ArrowLeft':
             keys.ArrowLeft.pressed = false;
